@@ -16,15 +16,16 @@ void plant(Tree** tree) {
     }
 }
 
-
 Tree* build_tree(int h) {
     Queue* q = newQueue();
+
     Tree* tree = (Tree*) malloc(sizeof(Tree));
     enqueue(q, tree);
-    int n = (int) pow(2, h - 1) - 1;
+
+    int n = (int) pow(2, h - 1) - 1; // qtd de nós
     int i = 1;
 
-    tree->data = (char) i;
+    tree->c = i;
     tree->left = NULL;
     tree->right = NULL;
 
@@ -32,17 +33,18 @@ Tree* build_tree(int h) {
         Tree* p = dequeue(q);
 
         Tree* left = (Tree*) malloc(sizeof(Tree));
-        left->data = i + 1;
+        left->c = i + 1;
         left->left = NULL;
         left->right = NULL;
 
         Tree* right = (Tree*) malloc(sizeof(Tree));
-        right->data = i + 2;
+        right->c = i + 2;
         right->left = NULL;
         right->right = NULL;
-        
+
         p->left = left;
         p->right = right;
+
         i += 2;
 
         if (i <= n) {
@@ -50,21 +52,22 @@ Tree* build_tree(int h) {
             enqueue(q, right);
         }
     }
+
+    return tree;
 }
 
-
 void show_in_level(Tree* tree) {
-    Queue* left = newQueue();
-    enqueue(left, tree);
+    Queue* q = newQueue();
+    enqueue(q, tree);
 
-    while (left->head != NULL) {
-        Tree* p = dequeue(left);
+    printf("In Level: ");
 
-        if (p != NULL) {
-            printf("%c ", p->data);
-            enqueue(left, p->left);
-            enqueue(left, p->right);
-        }
+    while (q->head != NULL) {
+        Tree* p = dequeue(q);
+        if (p == NULL) continue;
+        printf("%d ", p->c);
+        enqueue(q, p->left);
+        enqueue(q, p->right);
     }
 
     printf("\n");
@@ -74,22 +77,24 @@ void show_pre_order(Tree* tree) {
     Stack* s = newStack();
     push(s, tree);
 
+    printf("Pre Order: ");
+
     while (s->top != NULL) {
         Tree* p = pop(s);
-
-        if (p != NULL) {
-            printf("%c ", p->data);
-            push(s, p->right);
-            push(s, p->left);
-        }
+        if (p == NULL) continue;
+        printf("%d ", p->c);
+        push(s, p->right);
+        push(s, p->left);
     }
 
     printf("\n");
 }
 
 void show_in_order(Tree* tree) {
-    Stack* s = newStack();
+    printf("In Order: ");
+
     Tree* p = tree;
+    Stack* s = newStack();
 
     while (p != NULL || s->top != NULL) {
         while (p != NULL) {
@@ -98,7 +103,7 @@ void show_in_order(Tree* tree) {
         }
 
         p = pop(s);
-        printf("%c ", p->data);
+        printf("%d ", p->c);
         p = p->right;
     }
 
@@ -109,6 +114,8 @@ void show_post_order(Tree* tree) {
     Stack* s = newStack();
     Tree* p = tree;
 
+    printf("Post Order: ");
+
     while (p != NULL || s->top != NULL) {
         while (p != NULL) {
             push_with_time(s, p, 1);
@@ -117,14 +124,14 @@ void show_post_order(Tree* tree) {
 
         while (p == NULL && s->top != NULL) {
             Node* node = pop_with_time(s);
-            int time = node->time;
             p = node->data;
+            int time = node->time;
 
-            if (time == 1 && p->left != NULL) {
+            if (time == 1 && p->right != NULL) {
                 push_with_time(s, p, 2);
                 p = p->right;
             } else {
-                printf("%c ", p->data);
+                printf("%d ", p->c);
                 p = NULL;
             }
         }
@@ -133,24 +140,26 @@ void show_post_order(Tree* tree) {
     printf("\n");
 }
 
-// Recursive functions
 void rshow_pre_order(Tree* tree) {
     if (tree == NULL) return;
-    printf("%c ", tree->data);
+
+    printf("%d ", tree->c);
     rshow_pre_order(tree->left);
     rshow_pre_order(tree->right);
 }
 
 void rshow_in_order(Tree* tree) {
     if (tree == NULL) return;
+
     rshow_in_order(tree->left);
-    printf("%c ", tree->data);
-    rshow_in_order(tree->right);
+    printf("%d ", tree->c);
+    rshow_in_order(tree->left);
 }
 
 void rshow_post_order(Tree* tree) {
     if (tree == NULL) return;
+
     rshow_post_order(tree->left);
     rshow_post_order(tree->right);
-    printf("%c ", tree->data);
+    printf("%d ", tree->c);
 }

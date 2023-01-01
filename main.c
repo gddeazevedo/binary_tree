@@ -3,21 +3,21 @@
 
 
 int main() {
-    Tree* tree = build_tree(3);
+    Tree* tree = build_tree(4);
 
-
-    // plant(&tree);
-    printf("In level: ");
     show_in_level(tree);
 
-    printf("Pre pre order: ");
     show_pre_order(tree);
+    rshow_pre_order(tree);
+    printf("\n");
 
-    printf("In order: ");
     show_in_order(tree);
+    rshow_in_order(tree);
+    printf("\n");
 
-    printf("Post order: ");
     show_post_order(tree);
+    rshow_post_order(tree);
+    printf("\n");
 
     return 0;
 }

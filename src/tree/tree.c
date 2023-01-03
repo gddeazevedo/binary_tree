@@ -54,16 +54,16 @@ Tree* build_tree(int h) {
 
 
 void show_in_level(Tree* tree) {
-    Queue* left = newQueue();
-    enqueue(left, tree);
+    Queue* q = newQueue();
+    enqueue(q, tree);
 
-    while (left->head != NULL) {
-        Tree* p = dequeue(left);
+    while (q->head != NULL) {
+        Tree* p = dequeue(q);
 
         if (p != NULL) {
             printf("%c ", p->data);
-            enqueue(left, p->left);
-            enqueue(left, p->right);
+            enqueue(q, p->left);
+            enqueue(q, p->right);
         }
     }
 
